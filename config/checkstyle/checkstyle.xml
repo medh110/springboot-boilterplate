@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+        "http://checkstyle.sourceforge.net/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+
+    <!-- Define the coding style to be enforced -->
+    <module name="TreeWalker">
+        <!-- Example checks -->
+        <module name="NoWhitespaceAfter"/>
+        <module name="AvoidStarImport"/>
+        <module name="ConstantName"/>
+        <module name="EmptyBlock"/>
+        <!-- Add more TreeWalker checks as needed -->
+    </module>
+
+    <!-- Define module for file content checks -->
+    <module name="FileLength">
+        <property name="max" value="1000"/>
+    </module>
+
+</module>
+
