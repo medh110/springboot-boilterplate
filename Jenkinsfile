@@ -8,6 +8,7 @@ pipeline {
         CONTAINER_NAME = "springboot-app"
         SPRINGBOOT_PORT = "8080"
         SSM_PARAMETER_NAME = "/jenkins/aws_account_id"
+        TRIVY_IMAGE = "aquasec/trivy:latest"
     }
 
     stages {
@@ -56,6 +57,17 @@ pipeline {
             }
         }
 
+        stage('Scan Docker Image') {
+            steps {
+                script {
+                    // Pull and run Trivy to scan the Docker image
+                    sh """
+                    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock $TRIVY_IMAGE image --exit-code 1 $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$ECR_IMAGE_TAG
+                    """
+                }
+            }
+        }
+
         stage('Push Docker Image to ECR') {
             steps {
                 script {
@@ -79,5 +91,3 @@ pipeline {
         }
     }
 }
-
-//note:this is jenkinsfile to deploy to EC2 instance
