@@ -7,7 +7,7 @@ pipeline {
         ECR_IMAGE_TAG = "latest"
         CONTAINER_NAME = "springboot-app"
         SPRINGBOOT_PORT = "8080"
-        SSM_PARAMETER_NAME = "/myapp/aws_account_id"
+        SSM_PARAMETER_NAME = "/jenkins/aws_account_id"
     }
 
     stages {
@@ -19,8 +19,6 @@ pipeline {
                         script: "aws ssm get-parameter --name $SSM_PARAMETER_NAME --region $AWS_REGION --query Parameter.Value --output text",
                         returnStdout: true
                     ).trim()
-
-                    // Set the account ID as an environment variable
                     env.AWS_ACCOUNT_ID = accountId
                 }
             }
@@ -28,7 +26,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://your-git-repo-url.git'
+                git 'https://github.com/medh110/springboot-boilterplate.git'
             }
         }
 
@@ -81,3 +79,5 @@ pipeline {
         }
     }
 }
+
+//note:this is jenkinsfile to deploy to EC2 instance

@@ -1,0 +1,15 @@
+{{- if .Values.createService }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: {{.Values.app}}-port
+      port: 8080
+      protocol: TCP
+  selector:
+    app: {{.Values.app}}
+{{- end }}
+

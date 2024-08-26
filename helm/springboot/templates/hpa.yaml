@@ -1,0 +1,35 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+ name: {{ .Value.app.-hpa }}
+ namespace: {{ .Value.namespace}}
+ annotations:
+   config.linkerd.io/proxy-cpu-request: "500m"
+   config.linkerd.io/proxy-memory-request: "300Mi"
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: {{ .Value.app }}
+ minReplicas: {{ .Value.hpa.minReplicas }}
+ maxReplicas: {{ .Value.hpa.maxReplicas }}
+ behavior:
+   scaleUp:
+     stabilizationWindowSeconds: 30
+     policies:
+     - type: Pods
+       value: 1
+       periodSeconds: 15
+   scaleDown:
+     stabilizationWindowSeconds: 30
+     policies:
+     - type: Pods
+       value: 1
+       periodSeconds: 10
+ metrics:
+   - type: Resource
+     resource:
+       name: memory
+       target:
+         type: Utilization
+         averageUtilization: {{ .Values.hpa.targetMemoryUtilizationPercentage
